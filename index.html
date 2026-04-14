@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Care - Admin Professional</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        :root {
+            --gradient-sidebar: linear-gradient(180deg, #E0FFFF 0%, #A0E0FF 100%);
+            --rs-blue: #0D8ABC;
+        }
+
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #334155; margin: 0; }
+        
+        #login-section, #dashboard-section { display: none !important; }
+
+        .login-card { background: #fff; padding: 45px; border-radius: 20px; width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        .input-box { background: #F1F3F5; border-radius: 12px; padding: 12px 18px; margin-bottom: 20px; display: flex; align-items: center; }
+        .input-box input { border: none; background: transparent; width: 100%; outline: none; font-size: 14px; color: #495057; }
+        .btn-masuk { background: #000; color: #fff; width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 500; margin-top: 10px; }
+
+        .sidebar { 
+            min-height: 100vh; background: var(--gradient-sidebar); 
+            position: fixed; width: 280px; box-shadow: 4px 0 15px rgba(0,0,0,0.03); 
+        }
+        .sidebar-brand { padding: 40px 20px; text-align: center; }
+        .sidebar-logo { width: 90px; height: 90px; border-radius: 50%; background: #fff; padding: 5px; margin-bottom: 15px; }
+        .sidebar-title { font-size: 18px; font-weight: 600; color: #0D8ABC; }
+        
+        .sidebar a { 
+            padding: 16px 30px; display: block; color: #52606D; 
+            text-decoration: none; font-weight: 500; transition: 0.2s;
+            border-radius: 0 50px 50px 0; margin-right: 20px;
+        }
+        .sidebar a:hover, .sidebar a.active-menu { background: rgba(255,255,255,0.5); color: var(--rs-blue); font-weight: 600; }
+
+        .main-content { margin-left: 280px; padding: 50px; }
+        .card-data { background: #fff; border-radius: 20px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        .table thead th { font-weight: 500; font-size: 11px; text-transform: uppercase; color: #94A3B8; padding: 15px; border-bottom: 1px solid #eee; }
+        .table tbody td { font-size: 13.5px; padding: 15px; vertical-align: middle; }
+        .modal-content { border-radius: 24px; border: none; }
+    </style>
+</head>
+<body>
+
+    <div id="login-section" style="background: linear-gradient(135deg, #E0FFFF 0%, #A0E0FF 100%); align-items: center; justify-content: center; min-height: 100vh; gap: 80px;">
+        <div class="text-center">
+            <img src="logo_rssukapura.png" alt="Logo RSIJ Sukapura" style="width:200px;">
+            <h3 class="fw-semibold mt-4">Mental Health Care</h3>
+            <p class="text-secondary small">Supported By Rumah Sakit Islam Jakarta Sukapura</p>
+        </div>
+        <div class="login-card">
+            <div class="input-box">
+                <i class="bi bi-person-fill me-3 fs-5 text-secondary"></i>
+                <input type="text" id="id-admin" placeholder="ID">
+            </div>
+            <div class="input-box">
+                <i class="bi bi-lock-fill me-3 fs-5 text-secondary"></i>
+                <input type="password" id="password-admin" placeholder="Password">
+                <i class="bi bi-eye-slash ms-2 text-secondary" id="toggleLoginPass" style="cursor:pointer"></i>
+            </div>
+            <button id="btn-login" class="btn-masuk">Masuk</button>
+        </div>
+    </div>
+
+    <div id="dashboard-section">
+        <div class="sidebar shadow">
+            <div class="sidebar-brand">
+                <img src="logo_rssukapura.png" alt="Logo" class="sidebar-logo shadow-sm">
+                <div class="sidebar-title">Admin</div>
+                <p class="small text-secondary m-0">Rumah Sakit Islam Jakarta Sukapura Kelapa Gading</p>
+            </div>
+            <a href="#" id="nav-pegawai" onclick="switchTab('tab-pegawai', this)" class="active-menu"><i class="bi bi-people me-3"></i>Kelola Pegawai</a>
+            <a href="#" id="nav-gejala" onclick="switchTab('tab-gejala', this)"><i class="bi bi-ui-checks-grid me-3"></i>Parameter Gejala</a>
+            <a href="#" id="nav-pasien" onclick="switchTab('tab-pasien', this)"><i class="bi bi-folder2-open me-3"></i>Riwayat Pasien</a>
+            
+            <div style="position:absolute; bottom:30px; width:100%; padding:0 30px;">
+                <button id="btn-logout" class="btn btn-sm btn-outline-danger w-100 rounded-pill">Keluar</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div id="tab-pegawai" class="tab-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-semibold m-0">Kelola Pegawai</h4>
+                    <button class="btn btn-primary btn-sm px-4 rounded-pill" onclick="openModalPegawai()"><i class="bi bi-plus-lg me-2"></i>Tambah Akun</button>
+                </div>
+                <div class="card card-data p-4">
+                    <table class="table"><thead><tr><th>Nomor Karyawan</th><th>Nama Lengkap</th><th>Jabatan</th><th>Password</th><th class="no-export">Aksi</th></tr></thead><tbody id="list-pegawai"></tbody></table>
+                </div>
+            </div>
+
+            <div id="tab-gejala" class="tab-content d-none">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-semibold m-0">Parameter Gejala</h4>
+                    <button class="btn btn-primary btn-sm px-4 rounded-pill" onclick="openModalGejala()"><i class="bi bi-plus-lg me-2"></i>Tambah Gejala</button>
+                </div>
+                <div class="card card-data p-4">
+                    <table class="table"><thead><tr><th>Kode Gejala</th><th>Jenis Variabel</th><th>Deskripsi Gejala</th><th class="no-export">Aksi</th></tr></thead><tbody id="list-gejala"></tbody></table>
+                </div>
+            </div>
+
+            <div id="tab-pasien" class="tab-content d-none">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-semibold m-0">Riwayat Skrining Pasien</h4>
+                    <button onclick="exportExcel()" class="btn btn-success btn-sm px-4 rounded-pill"><i class="bi bi-download me-2"></i>Export Excel</button>
+                </div>
+                <div class="card card-data p-4">
+                    <div class="table-responsive">
+                        <table class="table" id="tabel-pasien-full">
+                            <thead><tr><th>Tanggal</th><th>ID Pasien</th><th>Nama Pasien</th><th>Hasil</th><th>Status</th><th>Catatan Dokter</th><th>Catatan RS</th><th class="text-center no-export">Aksi</th></tr></thead>
+                            <tbody id="list-pasien"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalPegawai" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h5 class="fw-semibold mb-4 text-center">Kelola Akun Pegawai</h5>
+                <input type="hidden" id="edit-id-pegawai">
+                <label class="small text-secondary mb-2">Nomor Induk Karyawan</label><input type="text" id="p-id" class="form-control mb-3">
+                <label class="small text-secondary mb-2">Nama Lengkap</label><input type="text" id="p-nama" class="form-control mb-3">
+                <label class="small text-secondary mb-2">Jabatan</label><select id="p-role" class="form-select mb-3"><option value="DOKTER">Dokter</option><option value="PETUGAS">Petugas Medis</option></select>
+                <label class="small text-secondary mb-2">Password</label>
+                <div class="input-group mb-4"><input type="password" id="p-pass" class="form-control"><button class="btn btn-outline-secondary" type="button" onclick="togglePass('p-pass')"><i class="bi bi-eye"></i></button></div>
+                <button id="savePegawai" class="btn btn-primary w-100 py-2 rounded-3 shadow-sm">Simpan Data</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalGejala" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h5 class="fw-semibold mb-4 text-center">Kelola Parameter Gejala</h5>
+                <input type="hidden" id="edit-id-gejala">
+                <input type="hidden" id="old-coll-gejala">
+                <label class="small text-secondary mb-2">Tipe Variabel</label>
+                <select id="g-tipe" class="form-select mb-3" onchange="toggleSubSelect()">
+                    <option value="tetap">Variabel Tetap (Induk)</option>
+                    <option value="tidak_tetap">Variabel Tidak Tetap (Sub)</option>
+                </select>
+                <div id="wrap-parent" class="d-none">
+                    <label class="small text-secondary mb-2">Kategori Induk</label>
+                    <select id="g-parent" class="form-select mb-3"></select>
+                </div>
+                <label class="small text-secondary mb-2">Kode Gejala</label><input type="text" id="g-kode" class="form-control mb-3">
+                <label class="small text-secondary mb-2">Deskripsi Gejala</label><textarea id="g-nama" class="form-control mb-4" rows="3"></textarea>
+                <button id="saveGejala" class="btn btn-primary w-100 py-2 rounded-3 shadow-sm">Simpan Gejala</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalDetailPasien" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h5 class="fw-semibold mb-3 border-bottom pb-2">Detail Gejala Dipilih</h5>
+                <div id="detail-pasien-content"></div>
+                <div class="text-end mt-4"><button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">Tutup</button></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, onSnapshot, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBQuc2BEU1gu-7nBLziaS5nZsSWHjmCNqs",
+            authDomain: "database-mental-health-2523b.firebaseapp.com",
+            projectId: "database-mental-health-2523b",
+            storageBucket: "database-mental-health-2523b.firebasestorage.app",
+            messagingSenderId: "221258504465",
+            appId: "1:221258504465:web:991315c7409803244854b0"
+        };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+
+        let gejalaLookup = {};
+
+        window.formatJabatan = (text) => {
+            if(!text) return "-";
+            return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+        }
+        window.switchTab = (id, el) => {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('d-none'));
+            document.getElementById(id).classList.remove('d-none');
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active-menu'));
+            if(el) el.classList.add('active-menu');
+            localStorage.setItem('activeTab', id);
+        }
+        window.togglePass = (id) => { const el = document.getElementById(id); el.type = el.type === 'password' ? 'text' : 'password'; };
+        window.viewPass = (id) => { const p = document.getElementById('pass-' + id); p.type = p.type === 'password' ? 'text' : 'password'; };
+        window.hapusData = async (c, id) => { if(confirm("Hapus data ini?")) await deleteDoc(doc(db, c, id)); };
+
+        const inputId = document.getElementById('id-admin');
+        const inputPass = document.getElementById('password-admin');
+        const handleLogin = () => signInWithEmailAndPassword(auth, inputId.value + "@rssukapura.com", inputPass.value).catch(() => alert("ID atau Password Anda Salah"));
+        document.getElementById('btn-login').onclick = handleLogin;
+        [inputId, inputPass].forEach(el => el.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); }));
+        document.getElementById('toggleLoginPass').onclick = function() { inputPass.type = inputPass.type === 'password' ? 'text' : 'password'; this.classList.toggle('bi-eye'); };
+        document.getElementById('btn-logout').onclick = () => { localStorage.clear(); signOut(auth); };
+
+        onAuthStateChanged(auth, user => {
+            const loginSec = document.getElementById('login-section');
+            const dashSec = document.getElementById('dashboard-section');
+            if(user) {
+                loginSec.style.setProperty('display', 'none', 'important');
+                dashSec.style.setProperty('display', 'block', 'important');
+                const savedTab = localStorage.getItem('activeTab') || 'tab-pegawai';
+                const tabBtn = document.getElementById('nav-' + savedTab.split('-')[1]);
+                switchTab(savedTab, tabBtn);
+                initSync();
+            } else {
+                loginSec.style.setProperty('display', 'flex', 'important');
+                dashSec.style.setProperty('display', 'none', 'important');
+            }
+        });
+
+        function initSync() {
+            onSnapshot(collection(db, "master_gejala"), snap => snap.forEach(d => { const v = d.data(); gejalaLookup[v.kode_gejala] = v.nama_gejala; }));
+
+            onSnapshot(collection(db, "users"), snap => {
+                const list = document.getElementById('list-pegawai'); list.innerHTML = "";
+                snap.forEach(d => {
+                    const v = d.data(); if(v.role !== 'admin') {
+                        list.innerHTML += `<tr><td>${v.id_login}</td><td class="fw-medium">${v.nama}</td><td>${formatJabatan(v.role)}</td>
+                        <td><div class="input-group input-group-sm"><input type="password" readonly class="form-control border-0 bg-transparent" value="${v.password || ''}" id="pass-${d.id}"><button class="btn btn-sm" onclick="viewPass('${d.id}')"><i class="bi bi-eye"></i></button></div></td>
+                        <td class="no-export"><button class="btn btn-sm text-primary me-2" onclick="editPegawai('${d.id}')"><i class="bi bi-pencil"></i></button><button class="btn btn-sm text-danger" onclick="hapusData('users', '${d.id}')"><i class="bi bi-trash"></i></button></td></tr>`;
+                    }
+                });
+            });
+
+            let currentKat = []; let currentMas = [];
+            onSnapshot(collection(db, "kategori_gejala"), snap => {
+                currentKat = []; const sel = document.getElementById('g-parent'); sel.innerHTML = "";
+                snap.forEach(d => { currentKat.push({...d.data(), id: d.id, coll: 'kategori_gejala'}); sel.innerHTML += `<option value="${d.data().kode_induk}">${d.data().nama_induk}</option>`; });
+                renderGejala();
+            });
+            onSnapshot(collection(db, "master_gejala"), snap => {
+                currentMas = []; snap.forEach(d => { currentMas.push({...d.data(), id: d.id, coll: 'master_gejala'}); });
+                renderGejala();
+            });
+
+            function renderGejala() {
+                const list = document.getElementById('list-gejala'); list.innerHTML = "";
+                const combined = [
+                    ...currentKat.map(v => ({ kode: v.kode_induk, nama: v.nama_induk, tipe: 'TETAP', id: v.id, coll: v.coll })),
+                    ...currentMas.map(v => ({ kode: v.kode_gejala, nama: v.nama_gejala, tipe: 'TIDAK TETAP', id: v.id, coll: v.coll }))
+                ].sort((a,b) => a.kode.localeCompare(b.kode, undefined, {numeric: true}));
+                combined.forEach(v => {
+                    const isT = v.tipe === 'TETAP';
+                    list.innerHTML += `<tr class="${isT ? 'table-light fw-semibold' : ''}"><td>${v.kode}</td><td class="${isT ? 'text-primary' : 'text-secondary'} small">${v.tipe}</td><td>${v.nama}</td>
+                    <td class="no-export"><button class="btn btn-sm text-primary me-2" onclick="editGejala('${v.coll}', '${v.id}')"><i class="bi bi-pencil"></i></button><button class="btn btn-sm text-danger" onclick="hapusData('${v.coll}', '${v.id}')"><i class="bi bi-trash"></i></button></td></tr>`;
+                });
+            }
+
+            onSnapshot(collection(db, "riwayat_screening"), snap => {
+                const list = document.getElementById('list-pasien'); list.innerHTML = "";
+                snap.forEach(d => {
+                    const v = d.data(); const badge = v.status === "Tervalidasi" ? "bg-success" : "bg-warning text-dark";
+                    const strG = v.gejala_dipilih ? v.gejala_dipilih.map(g => `${g} - ${gejalaLookup[g] || 'Gejala'}`).join(", ") : "-";
+                    list.innerHTML += `<tr><td>${v.tanggal_screening}</td><td>${v.id_pasien}</td><td class="fw-medium">${v.nama_pasien || "-"}</td><td>${v.hasil_ai}</td>
+                    <td><span class="badge ${badge}">${v.status}</span></td><td>${v.catatan_dokter || "-"}</td><td>${v.catatan_rs || "-"}</td>
+                    <td class="d-none export-gejala">${strG}</td>
+                    <td class="text-center no-export"><button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="showDetail('${d.id}')">Detail</button></td></tr>`;
+                });
+            });
+        }
+
+        window.openModalPegawai = () => { document.getElementById('edit-id-pegawai').value = ""; document.getElementById('p-id').value = ""; document.getElementById('p-nama').value = ""; document.getElementById('p-pass').value = ""; new bootstrap.Modal(document.getElementById('modalPegawai')).show(); };
+        window.editPegawai = async (id) => { const s = await getDoc(doc(db, "users", id)); const v = s.data(); document.getElementById('edit-id-pegawai').value = id; document.getElementById('p-id').value = v.id_login; document.getElementById('p-nama').value = v.nama; document.getElementById('p-role').value = v.role; document.getElementById('p-pass').value = v.password || ""; new bootstrap.Modal(document.getElementById('modalPegawai')).show(); };
+        window.savePegawai = async () => { const id = document.getElementById('p-id').value; const editId = document.getElementById('edit-id-pegawai').value; await setDoc(doc(db, "users", editId || id), { id_login: id, nama: document.getElementById('p-nama').value, role: document.getElementById('p-role').value, password: document.getElementById('p-pass').value }); bootstrap.Modal.getInstance(document.getElementById('modalPegawai')).hide(); };
+        document.getElementById('savePegawai').onclick = window.savePegawai;
+
+        window.openModalGejala = () => { document.getElementById('edit-id-gejala').value = ""; document.getElementById('g-kode').value = ""; document.getElementById('g-nama').value = ""; new bootstrap.Modal(document.getElementById('modalGejala')).show(); };
+        window.editGejala = async (c, id) => { 
+            const s = await getDoc(doc(db, c, id)); const v = s.data(); document.getElementById('edit-id-gejala').value = id; document.getElementById('old-coll-gejala').value = c;
+            document.getElementById('g-tipe').value = c === 'kategori_gejala' ? 'tetap' : 'tidak_tetap'; toggleSubSelect();
+            document.getElementById('g-kode').value = v.kode_induk || v.kode_gejala; document.getElementById('g-nama').value = v.nama_induk || v.nama_gejala;
+            if(v.parent) document.getElementById('g-parent').value = v.parent; new bootstrap.Modal(document.getElementById('modalGejala')).show(); 
+        };
+        window.saveGejala = async () => { 
+            const t = document.getElementById('g-tipe').value; const c = t === 'tetap' ? 'kategori_gejala' : 'master_gejala'; 
+            const k = document.getElementById('g-kode').value; const n = document.getElementById('g-nama').value;
+            const editId = document.getElementById('edit-id-gejala').value; const oldColl = document.getElementById('old-coll-gejala').value;
+            if(editId && oldColl && (editId !== k || oldColl !== c)) { await deleteDoc(doc(db, oldColl, editId)); }
+            const d = t === 'tetap' ? { kode_induk: k, nama_induk: n } : { kode_gejala: k, nama_gejala: n, parent: document.getElementById('g-parent').value };
+            await setDoc(doc(db, c, k), d); bootstrap.Modal.getInstance(document.getElementById('modalGejala')).hide();
+        };
+        document.getElementById('saveGejala').onclick = window.saveGejala;
+        
+        window.showDetail = async (id) => { 
+            const s = await getDoc(doc(db, "riwayat_screening", id)); const v = s.data();
+            let h = `<div class="p-3 bg-light mb-3 rounded shadow-sm"><strong>Nama Pasien:</strong> ${v.nama_pasien || "-"}</div><ul class="list-group">`;
+            if(v.gejala_dipilih) v.gejala_dipilih.forEach(g => h += `<li class="list-group-item"><strong>${g}</strong> - ${gejalaLookup[g] || 'Deskripsi Gejala'}</li>`);
+            document.getElementById('detail-pasien-content').innerHTML = h + "</ul>";
+            new bootstrap.Modal(document.getElementById('modalDetailPasien')).show();
+        };
+
+        window.toggleSubSelect = () => { document.getElementById('wrap-parent').classList.toggle('d-none', document.getElementById('g-tipe').value === 'tetap'); };
+        window.exportExcel = () => {
+            const clone = document.getElementById("tabel-pasien-full").cloneNode(true);
+            const header = clone.querySelector("thead tr"); header.cells[header.cells.length - 1].innerText = "Gejala Yang Dipilih";
+            clone.querySelectorAll('tbody tr').forEach(r => {
+                const hidden = r.querySelector('.export-gejala'); const cell = r.cells[r.cells.length - 1];
+                cell.innerHTML = hidden ? hidden.innerText : "-"; if(hidden) hidden.remove();
+            });
+            XLSX.writeFile(XLSX.utils.table_to_book(clone), "Laporan_RSJ_Sukapura.xlsx");
+        }
+    </script>
+</body>
+</html>
