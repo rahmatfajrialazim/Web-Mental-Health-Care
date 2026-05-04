@@ -84,7 +84,7 @@
                     <div class="d-flex gap-3">
                         <div class="search-container">
                             <i class="bi bi-search"></i>
-                            <input type="text" id="searchPegawai" class="form-control" placeholder="Cari Nama atau ID Karyawan..." onkeyup="filterPegawai()">
+                            <input type="text" id="searchPegawai" class="form-control" placeholder="Cari Nama atau Nomor Karyawan..." onkeyup="filterPegawai()">
                         </div>
                         <button class="btn btn-primary btn-sm px-4 rounded-pill" onclick="openModalPegawai()"><i class="bi bi-plus-lg me-2"></i>Tambah Akun</button>
                     </div>
@@ -114,7 +114,7 @@
                     <div class="d-flex gap-3">
                         <div class="search-container">
                             <i class="bi bi-search"></i>
-                            <input type="text" id="searchPasien" class="form-control" placeholder="Cari Nama atau ID Pasien..." onkeyup="filterPasien()">
+                            <input type="text" id="searchPasien" class="form-control" placeholder="Cari Nama atau NIK Pasien..." onkeyup="filterPasien()">
                         </div>
                         <button onclick="exportExcel()" class="btn btn-success btn-sm px-4 rounded-pill"><i class="bi bi-download me-2"></i>Export Excel</button>
                     </div>
@@ -122,7 +122,7 @@
                 <div class="card card-data p-4">
                     <div class="table-responsive">
                         <table class="table" id="tabel-pasien-full">
-                            <thead><tr><th>Tanggal</th><th>ID Pasien</th><th>Nama Pasien</th><th>Hasil</th><th>Status</th><th>Catatan Dokter</th><th>Catatan Petugas Medis</th><th class="text-center no-export">Aksi</th></tr></thead>
+                            <thead><tr><th>Tanggal</th><th>NIK Pasien</th><th>Nama Pasien</th><th>Hasil</th><th>Status</th><th>Catatan Dokter</th><th>Catatan Petugas Medis</th><th class="text-center no-export">Aksi</th></tr></thead>
                             <tbody id="list-pasien"></tbody>
                         </table>
                     </div>
@@ -135,7 +135,7 @@
             <div class="modal-content p-4">
                 <h5 class="fw-semibold mb-4 text-center">Kelola Akun Pegawai</h5>
                 <input type="hidden" id="edit-id-pegawai">
-                <label class="small text-secondary mb-2">Nomor Induk Karyawan</label><input type="text" id="p-id" class="form-control mb-3">
+                <label class="small text-secondary mb-2">Nomor Karyawan</label><input type="text" id="p-id" class="form-control mb-3">
                 <label class="small text-secondary mb-2">Nama Lengkap</label><input type="text" id="p-nama" class="form-control mb-3">
                 <label class="small text-secondary mb-2">Jabatan</label><select id="p-role" class="form-select mb-3"><option value="dokter">Dokter</option><option value="petugas_medis">Petugas Medis</option></select>
                 <label class="small text-secondary mb-2">Password (Kosongkan jika hanya edit profil)</label>
