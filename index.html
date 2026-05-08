@@ -15,8 +15,9 @@
         }
         body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #334155; margin: 0; }
         #login-section, #dashboard-section { display: none !important; }
-        .login-card { background: #fff; padding: 45px; border-radius: 20px; width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
-        .input-box { background: #F1F3F5; border-radius: 12px; padding: 12px 18px; margin-bottom: 20px; display: flex; align-items: center; }
+        
+        .login-card { background: #fff; padding: 50px 60px; border-radius: 20px; width: 520px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        .input-box { background: #F1F3F5; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; }
         .input-box input { border: none; background: transparent; width: 100%; outline: none; font-size: 14px; color: #495057; }
         .btn-masuk { background: #000; color: #fff; width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 500; margin-top: 10px; }
         .sidebar { 
@@ -24,7 +25,10 @@
             position: fixed; width: 280px; box-shadow: 4px 0 15px rgba(0,0,0,0.03); 
         }
         .sidebar-brand { padding: 40px 20px; text-align: center; }
-        .sidebar-logo { width: 90px; height: 90px; border-radius: 50%; background: #fff; padding: 5px; margin-bottom: 15px; }
+        
+        .login-logo { width: 240px; height: auto; margin-bottom: 15px; }
+        .sidebar-logo { width: 90px; height: auto; margin-bottom: 15px; }
+        
         .sidebar-title { font-size: 18px; font-weight: 600; color: #000; }
         .sidebar a { 
             padding: 16px 30px; display: block; color: #52606D; 
@@ -38,17 +42,18 @@
         .table tbody td { font-size: 13.5px; padding: 15px; border-bottom: 1px solid #F8FAFC; }
         .badge-status { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; }
         .modal-content { border-radius: 24px; border: none; }
-        .search-container { position: relative; width: 300px; }
-        .search-container input { padding-left: 35px; border-radius: 50px; font-size: 13px; }
-        .search-container i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94A3B8; }
+        .search-container { position: relative; width: 250px; }
+        .search-container input { padding-left: 35px; border-radius: 50px; font-size: 13px; border: 1px solid #dee2e6; }
+        .search-container i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94A3B8; z-index: 10; }
+        .filter-select { border-radius: 50px; font-size: 13px; padding: 6px 15px; border: 1px solid #dee2e6; color: #495057; outline: none; background-color: #fff; width: 200px; }
     </style>
 </head>
 <body>
-    <div id="login-section" style="background: linear-gradient(135deg, #E0FFFF 0%, #A0E0FF 100%); align-items: center; justify-content: center; min-height: 100vh; gap: 80px;">
+    <div id="login-section" style="background: linear-gradient(135deg, #E0FFFF 0%, #A0E0FF 100%); align-items: center; justify-content: center; min-height: 100vh; flex-direction: column; gap: 30px;">
         <div class="text-center">
-            <img src="logo_rssukapura.png" alt="Logo RSIJ Sukapura" style="width:200px;">
-            <h3 class="fw-semibold mt-4">Mental Health Care</h3>
-            <p class="text-secondary small">Supported By Rumah Sakit Islam Jakarta Sukapura Kelapa Gading</p>
+            <img src="logo-mh.png" alt="Logo" class="login-logo">
+            <h3 class="fw-semibold mt-2">Mental Health Care</h3>
+            <p class="text-secondary small">Portal Admin Mental Health Care</p>
         </div>
         <div class="login-card">
             <div class="input-box">
@@ -66,63 +71,99 @@
     <div id="dashboard-section">
         <div class="sidebar shadow">
             <div class="sidebar-brand">
-                <img src="logo_rssukapura.png" alt="Logo" class="sidebar-logo shadow-sm">
+                <img src="logo-mh.png" alt="Logo" class="sidebar-logo">
                 <div class="sidebar-title">Admin</div>
-                <p class="small text-secondary m-0">Rumah Sakit Islam Jakarta Sukapura Kelapa Gading</p>
+                <p class="small text-secondary m-0">Mental Health Care</p>
             </div>
-            <a href="#" id="nav-pegawai" onclick="switchTab('tab-pegawai', this)" class="active-menu"><i class="bi bi-people me-3"></i>Kelola Pegawai</a>
+            <a href="#" id="nav-rs" onclick="switchTab('tab-rs', this)" class="active-menu"><i class="bi bi-building me-3"></i>Data Rumah Sakit</a>
+            <a href="#" id="nav-pegawai" onclick="switchTab('tab-pegawai', this)"><i class="bi bi-people me-3"></i>Kelola Pegawai</a>
             <a href="#" id="nav-gejala" onclick="switchTab('tab-gejala', this)"><i class="bi bi-ui-checks-grid me-3"></i>Parameter Gejala</a>
-            <a href="#" id="nav-pasien" onclick="switchTab('tab-pasien', this)"><i class="bi bi-folder2-open me-3"></i>Riwayat Pasien</a>
+            <a href="#" id="nav-pasien" onclick="switchTab('tab-pasien', this)"><i class="bi bi-folder2-open me-3"></i>Data Skrining</a>
             <div style="position:absolute; bottom:30px; width:100%; padding:0 30px;">
                 <button id="btn-logout" class="btn btn-sm btn-outline-danger w-100 rounded-pill">Keluar</button>
             </div>
         </div>
         <div class="main-content">
-            <div id="tab-pegawai" class="tab-content">
+            
+            <div id="tab-rs" class="tab-content">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-semibold m-0">Kelola Pegawai</h4>
-                    <div class="d-flex gap-3">
+                    <h4 class="fw-semibold m-0">Data Master Rumah Sakit</h4>
+                    <div class="d-flex gap-2">
                         <div class="search-container">
                             <i class="bi bi-search"></i>
-                            <input type="text" id="searchPegawai" class="form-control" placeholder="Cari Nama atau Nomor Karyawan..." onkeyup="filterPegawai()">
+                            <input type="text" id="searchRS" class="form-control shadow-sm" placeholder="Cari Nama / Kode RS" onkeyup="filterRS()">
                         </div>
-                        <button class="btn btn-primary btn-sm px-4 rounded-pill" onclick="openModalPegawai()"><i class="bi bi-plus-lg me-2"></i>Tambah Akun</button>
+                        <button class="btn btn-primary btn-sm px-4 rounded-pill shadow-sm ms-2" onclick="openModalRS()"><i class="bi bi-plus-lg me-2"></i>Tambah RS</button>
                     </div>
                 </div>
                 <div class="card card-data p-4">
-                    <table class="table"><thead><tr><th>Nomor Karyawan</th><th>Nama Lengkap</th><th>Jabatan</th><th class="no-export">Aksi</th></tr></thead><tbody id="list-pegawai"></tbody></table>
+                    <table class="table">
+                        <thead><tr><th>Kode RS</th><th>Nama Rumah Sakit</th><th>Alamat</th><th class="no-export">Aksi</th></tr></thead>
+                        <tbody id="list-rs"></tbody>
+                    </table>
                 </div>
             </div>
+
+            <div id="tab-pegawai" class="tab-content d-none">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-semibold m-0">Kelola Pegawai</h4>
+                    <div class="d-flex gap-2">
+                        <select id="filter-rs-pegawai" class="filter-select shadow-sm" onchange="filterPegawai()">
+                            <option value="">Memuat Rumah Sakit...</option>
+                        </select>
+                        <div class="search-container">
+                            <i class="bi bi-search"></i>
+                            <input type="text" id="searchPegawai" class="form-control shadow-sm" placeholder="Cari Nama / ID" onkeyup="filterPegawai()">
+                        </div>
+                        <button class="btn btn-primary btn-sm px-4 rounded-pill shadow-sm ms-2" onclick="openModalPegawai()"><i class="bi bi-plus-lg me-2"></i>Tambah Akun</button>
+                    </div>
+                </div>
+                <div class="card card-data p-4">
+                    <table class="table">
+                        <thead><tr><th>Nomor Karyawan</th><th>Nama Lengkap</th><th>Instansi (RS)</th><th>Jabatan</th><th class="no-export">Aksi</th></tr></thead>
+                        <tbody id="list-pegawai"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <div id="tab-gejala" class="tab-content d-none">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-semibold m-0">Parameter Gejala</h4>
                     <div class="d-flex gap-3">
                         <div class="search-container">
                             <i class="bi bi-search"></i>
-                            <input type="text" id="searchGejala" class="form-control" placeholder="Cari Nama atau Kode Gejala..." onkeyup="filterGejala()">
+                            <input type="text" id="searchGejala" class="form-control shadow-sm" placeholder="Cari Nama atau Kode" onkeyup="filterGejala()">
                         </div>
-                        <button class="btn btn-primary btn-sm px-4 rounded-pill" onclick="openModalGejala()"><i class="bi bi-plus-lg me-2"></i>Tambah Gejala</button>
+                        <button class="btn btn-primary btn-sm px-4 rounded-pill shadow-sm" onclick="openModalGejala()"><i class="bi bi-plus-lg me-2"></i>Tambah Gejala</button>
                     </div>
                 </div>
                 <div class="card card-data p-4">
                     <table class="table"><thead><tr><th>Kode Gejala</th><th>Jenis Variabel</th><th>Deskripsi Gejala</th><th class="no-export">Aksi</th></tr></thead><tbody id="list-gejala"></tbody></table>
                 </div>
             </div>
+
             <div id="tab-pasien" class="tab-content d-none">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-semibold m-0">Riwayat Skrining Pasien</h4>
-                    <div class="d-flex gap-3">
+                    <h4 class="fw-semibold m-0">Monitoring Skrining Harian</h4>
+                    <div class="d-flex gap-2">
+                        <select id="filter-rs-pasien" class="filter-select shadow-sm" onchange="filterPasien()">
+                            <option value="">Memuat Rumah Sakit...</option>
+                        </select>
                         <div class="search-container">
                             <i class="bi bi-search"></i>
-                            <input type="text" id="searchPasien" class="form-control" placeholder="Cari Nama atau NIK Pasien..." onkeyup="filterPasien()">
+                            <input type="text" id="searchPasien" class="form-control shadow-sm" placeholder="Cari RS atau NIK" onkeyup="filterPasien()">
                         </div>
-                        <button onclick="exportExcel()" class="btn btn-success btn-sm px-4 rounded-pill"><i class="bi bi-download me-2"></i>Export Excel</button>
+                        <button onclick="exportExcel()" class="btn btn-success btn-sm px-4 rounded-pill shadow-sm ms-2"><i class="bi bi-download me-2"></i>Export Excel</button>
                     </div>
                 </div>
                 <div class="card card-data p-4">
+                    <div class="alert alert-info py-2 small mb-3">
+                        <i class="bi bi-shield-lock-fill me-2"></i><strong>Mode Privasi Aktif:</strong> Identitas dan detail rekam medis pasien disamarkan untuk melindungi kerahasiaan data sesuai standar operasional.
+                    </div>
                     <div class="table-responsive">
                         <table class="table" id="tabel-pasien-full">
-                            <thead><tr><th>Tanggal</th><th>NIK Pasien</th><th>Nama Pasien</th><th>Hasil</th><th>Status</th><th>Catatan Dokter</th><th>Catatan Petugas Medis</th><th class="text-center no-export">Aksi</th></tr></thead>
+                            <!-- REVISI PRIVASI: Kolom catatan dokter, RS, dan Aksi dihilangkan -->
+                            <thead><tr><th>Tanggal</th><th>NIK Pasien</th><th>Nama Pasien</th><th>Instansi (RS)</th><th>Hasil Analisa AI</th><th>Status Validasi</th></tr></thead>
                             <tbody id="list-pasien"></tbody>
                         </table>
                     </div>
@@ -130,20 +171,52 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL-MODAL MASTER & PEGAWAI TETAP SAMA -->
+    <div class="modal fade" id="modalRS" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+                <h5 class="fw-semibold mb-4 text-center">Data Master Rumah Sakit</h5>
+                <input type="hidden" id="edit-id-rs">
+                <label class="small text-secondary mb-2">Kode Rumah Sakit</label>
+                <input type="text" id="r-kode" class="form-control mb-3" placeholder="">
+                <label class="small text-secondary mb-2">Nama Rumah Sakit</label>
+                <input type="text" id="r-nama" class="form-control mb-3" placeholder="">
+                <label class="small text-secondary mb-2">Alamat Lengkap</label>
+                <textarea id="r-alamat" class="form-control mb-4" rows="3"></textarea>
+                <button id="saveRS" class="btn btn-primary w-100 py-2 rounded-3 shadow-sm">Simpan Rumah Sakit</button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="modalPegawai" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-4">
                 <h5 class="fw-semibold mb-4 text-center">Kelola Akun Pegawai</h5>
                 <input type="hidden" id="edit-id-pegawai">
-                <label class="small text-secondary mb-2">Nomor Karyawan</label><input type="text" id="p-id" class="form-control mb-3">
-                <label class="small text-secondary mb-2">Nama Lengkap</label><input type="text" id="p-nama" class="form-control mb-3">
-                <label class="small text-secondary mb-2">Jabatan</label><select id="p-role" class="form-select mb-3"><option value="dokter">Dokter</option><option value="petugas_medis">Petugas Medis</option></select>
-                <label class="small text-secondary mb-2">Password (Kosongkan jika hanya edit profil)</label>
+                
+                <label class="small text-secondary mb-2">Penempatan Rumah Sakit</label>
+                <select id="p-rs" class="form-select mb-3">
+                    <option value="">-- Pilih Rumah Sakit --</option>
+                </select>
+
+                <label class="small text-secondary mb-2">Nomor Karyawan</label>
+                <input type="text" id="p-id" class="form-control mb-3">
+                
+                <label class="small text-secondary mb-2">Nama Lengkap</label>
+                <input type="text" id="p-nama" class="form-control mb-3">
+                
+                <label class="small text-secondary mb-2">Jabatan</label>
+                <select id="p-role" class="form-select mb-3"><option value="dokter">Dokter</option><option value="petugas_medis">Petugas Medis</option></select>
+                
+                <label class="small text-secondary mb-2">Password</label>
                 <div class="input-group mb-4"><input type="password" id="p-pass" class="form-control"><button class="btn btn-outline-secondary" type="button" onclick="togglePass('p-pass')"><i class="bi bi-eye"></i></button></div>
+                
                 <button id="savePegawai" class="btn btn-primary w-100 py-2 rounded-3 shadow-sm">Simpan Data</button>
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modalGejala" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-4">
@@ -165,15 +238,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalDetailPasien" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content p-4">
-                <h5 class="fw-semibold mb-3 border-bottom pb-2">Detail Gejala Dipilih</h5>
-                <div id="detail-pasien-content"></div>
-                <div class="text-end mt-4"><button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">Tutup</button></div>
-            </div>
-        </div>
-    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
@@ -197,10 +262,28 @@
         const secondaryAuth = getAuth(secondaryApp);
 
         let gejalaLookup = {};
+        let rsList = [];
+        let rsLookup = {};
+
+        // FUNGSI MASKING PRIVASI
+        const maskNIK = (nik) => {
+            if (!nik) return "-";
+            if (nik.length < 10) return "****";
+            // Menyisakan 6 angka depan dan 4 angka belakang
+            return nik.substring(0, 6) + "******" + nik.substring(nik.length - 4);
+        };
+        
+        const maskName = (name) => {
+            if (!name) return "-";
+            // Nampilin huruf pertama aja di tiap kata
+            return name.split(' ').map(word => word.charAt(0) + "***").join(' ');
+        };
+
         window.formatJabatan = (text) => {
             if(!text) return "-";
-            return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+            return text.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
         }
+        
         window.switchTab = (id, el) => {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.add('d-none'));
             document.getElementById(id).classList.remove('d-none');
@@ -213,7 +296,7 @@
         
         const inputId = document.getElementById('id-admin');
         const inputPass = document.getElementById('password-admin');
-        const handleLogin = () => signInWithEmailAndPassword(auth, inputId.value + "@rssukapura.com", inputPass.value).catch(() => alert("ID atau Password Anda Salah"));
+        const handleLogin = () => signInWithEmailAndPassword(auth, inputId.value + "@mentalhealthcare.com", inputPass.value).catch(() => alert("ID atau Password Anda Salah"));
         document.getElementById('btn-login').onclick = handleLogin;
         [inputId, inputPass].forEach(el => el.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); }));
         document.getElementById('toggleLoginPass').onclick = function() { inputPass.type = inputPass.type === 'password' ? 'text' : 'password'; this.classList.toggle('bi-eye'); };
@@ -230,13 +313,13 @@
                     if (userDoc.exists() && userDoc.data().role === 'admin') {
                         loginSec.style.setProperty('display', 'none', 'important');
                         dashSec.style.setProperty('display', 'block', 'important');
-                        const savedTab = localStorage.getItem('activeTab') || 'tab-pegawai';
+                        const savedTab = localStorage.getItem('activeTab') || 'tab-rs';
                         const tabBtn = document.getElementById('nav-' + savedTab.split('-')[1]);
                         switchTab(savedTab, tabBtn);
                         initSync();
                     } else {
                         await signOut(auth);
-                        alert("Akses Ditolak: Halaman ini hanya untuk Admin");
+                        alert("Akses Ditolak: Halaman ini hanya untuk Admin Pusat");
                     }
                 } catch (error) {
                     console.error("Gagal cek role:", error);
@@ -249,17 +332,41 @@
         });
         
         function initSync() {
+            onSnapshot(collection(db, "master_rumahsakit"), snap => {
+                rsList = [];
+                rsLookup = {};
+                const listRS = document.getElementById('list-rs'); listRS.innerHTML = "";
+                
+                snap.forEach(d => {
+                    const v = d.data();
+                    rsList.push(v);
+                    rsLookup[v.kode_rs] = v.nama_rs;
+                    
+                    listRS.innerHTML += `<tr><td>${v.kode_rs}</td><td class="fw-medium">${v.nama_rs}</td><td>${v.alamat || "-"}</td>
+                    <td class="no-export"><button class="btn btn-sm text-primary me-2" onclick="editRS('${d.id}')"><i class="bi bi-pencil"></i></button><button class="btn btn-sm text-danger" onclick="hapusData('master_rumahsakit', '${d.id}')"><i class="bi bi-trash"></i></button></td></tr>`;
+                });
+                
+                const optionAll = '<option value="">Semua Rumah Sakit</option>';
+                const optionSelect = '<option value="">-- Pilih Rumah Sakit --</option>';
+                const optionsHtml = rsList.map(rs => `<option value="${rs.kode_rs}">${rs.nama_rs}</option>`).join('');
+                
+                document.getElementById('filter-rs-pegawai').innerHTML = optionAll + optionsHtml;
+                document.getElementById('filter-rs-pasien').innerHTML = optionAll + optionsHtml;
+                document.getElementById('p-rs').innerHTML = optionSelect + optionsHtml;
+            });
+
             onSnapshot(collection(db, "master_gejala"), snap => snap.forEach(d => { const v = d.data(); gejalaLookup[v.kode_gejala] = v.nama_gejala; }));
             
-            // Render list pegawai (Kolom password dihapus)
             onSnapshot(collection(db, "users"), snap => {
                 const list = document.getElementById('list-pegawai'); list.innerHTML = "";
                 snap.forEach(d => {
                     const v = d.data(); if(v.role !== 'admin') {
-                        list.innerHTML += `<tr><td>${v.id_login}</td><td class="fw-medium">${v.nama}</td><td>${formatJabatan(v.role)}</td>
+                        const namaRS = rsLookup[v.kode_rs] || v.kode_rs || "-";
+                        list.innerHTML += `<tr data-rs="${v.kode_rs || ''}"><td>${v.id_login}</td><td class="fw-medium">${v.nama}</td><td>${namaRS}</td><td>${formatJabatan(v.role)}</td>
                         <td class="no-export"><button class="btn btn-sm text-primary me-2" onclick="editPegawai('${d.id}')"><i class="bi bi-pencil"></i></button><button class="btn btn-sm text-danger" onclick="hapusData('users', '${d.id}')"><i class="bi bi-trash"></i></button></td></tr>`;
                     }
                 });
+                filterPegawai(); 
             });
             
             let currentKat = []; let currentMas = [];
@@ -284,24 +391,69 @@
                     <td class="no-export"><button class="btn btn-sm text-primary me-2" onclick="editGejala('${v.coll}', '${v.id}')"><i class="bi bi-pencil"></i></button><button class="btn btn-sm text-danger" onclick="hapusData('${v.coll}', '${v.id}')"><i class="bi bi-trash"></i></button></td></tr>`;
                 });
             }
+
+            // REVISI: Logika Pasien dirombak murni dengan fungsi Sensor (Masking)
             onSnapshot(collection(db, "riwayat_screening"), snap => {
                 const list = document.getElementById('list-pasien'); list.innerHTML = "";
                 snap.forEach(d => {
-                    const v = d.data(); const badge = v.status === "Tervalidasi" ? "bg-success" : "bg-warning text-dark";
-                    const strG = v.gejala_dipilih ? v.gejala_dipilih.map(g => `${g} - ${gejalaLookup[g] || 'Gejala'}`).join(", ") : "-";
-                    list.innerHTML += `<tr><td>${v.tanggal_screening}</td><td>${v.id_pasien}</td><td class="fw-medium">${v.nama_pasien || "-"}</td><td>${v.hasil_ai}</td>
-                    <td><span class="badge ${badge}">${v.status}</span></td><td>${v.catatan_dokter || "-"}</td><td>${v.catatan_rs || "-"}</td>
-                    <td class="d-none export-gejala">${strG}</td>
-                    <td class="text-center no-export"><button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="showDetail('${d.id}')">Detail</button></td></tr>`;
+                    const v = d.data(); 
+                    const namaRS = rsLookup[v.kode_rs] || v.kode_rs || "-";
+                    
+                    const hasilValidasi = v.hasil_validasi_dokter ? `<span class="text-success fw-medium">${v.hasil_validasi_dokter}</span>` : `<span class="text-secondary fst-italic">Belum Divalidasi</span>`;
+
+                    // Tombol detail, gejala, dan catatan dicabut dari DOM untuk menjaga privasi
+                    list.innerHTML += `<tr data-rs="${v.kode_rs || ''}">
+                        <td>${v.tanggal_screening || "-"}</td>
+                        <td data-t="s">${maskNIK(v.id_pasien)}</td>
+                        <td class="text-secondary fst-italic">${maskName(v.nama_pasien)}</td>
+                        <td>${namaRS}</td>
+                        <td>${v.hasil_ai || "-"}</td>
+                        <td>${hasilValidasi}</td>
+                    </tr>`;
                 });
+                filterPasien(); 
             });
         }
         
+        window.openModalRS = () => { 
+            document.getElementById('edit-id-rs').value = ""; 
+            document.getElementById('r-kode').value = ""; 
+            document.getElementById('r-kode').readOnly = false;
+            document.getElementById('r-nama').value = ""; 
+            document.getElementById('r-alamat').value = ""; 
+            new bootstrap.Modal(document.getElementById('modalRS')).show(); 
+        };
+        
+        window.editRS = async (id) => { 
+            const s = await getDoc(doc(db, "master_rumahsakit", id)); const v = s.data(); 
+            document.getElementById('edit-id-rs').value = id; 
+            document.getElementById('r-kode').value = v.kode_rs; 
+            document.getElementById('r-kode').readOnly = true;
+            document.getElementById('r-nama').value = v.nama_rs; 
+            document.getElementById('r-alamat').value = v.alamat; 
+            new bootstrap.Modal(document.getElementById('modalRS')).show(); 
+        };
+        
+        window.saveRS = async () => { 
+            const kode = document.getElementById('r-kode').value.trim(); 
+            const nama = document.getElementById('r-nama').value.trim();
+            const alamat = document.getElementById('r-alamat').value.trim();
+            const editId = document.getElementById('edit-id-rs').value;
+
+            if(!kode || !nama) { alert("Peringatan: Kode dan Nama RS wajib diisi."); return; }
+
+            const d = { kode_rs: kode, nama_rs: nama, alamat: alamat };
+            await setDoc(doc(db, "master_rumahsakit", editId || kode), d); 
+            bootstrap.Modal.getInstance(document.getElementById('modalRS')).hide();
+        };
+        document.getElementById('saveRS').onclick = window.saveRS;
+
         window.openModalPegawai = () => { 
             document.getElementById('edit-id-pegawai').value = ""; 
             document.getElementById('p-id').value = ""; 
             document.getElementById('p-nama').value = ""; 
             document.getElementById('p-pass').value = ""; 
+            document.getElementById('p-rs').value = ""; 
             document.getElementById('p-id').readOnly = false;
             new bootstrap.Modal(document.getElementById('modalPegawai')).show(); 
         };
@@ -313,6 +465,7 @@
             document.getElementById('p-id').readOnly = true;
             document.getElementById('p-nama').value = v.nama; 
             document.getElementById('p-role').value = v.role; 
+            document.getElementById('p-rs').value = v.kode_rs || ""; 
             document.getElementById('p-pass').value = "";
             new bootstrap.Modal(document.getElementById('modalPegawai')).show(); 
         };
@@ -322,9 +475,10 @@
             const nama = document.getElementById('p-nama').value.trim();
             const pass = document.getElementById('p-pass').value.trim();
             const role = document.getElementById('p-role').value;
+            const kodeRs = document.getElementById('p-rs').value;
             const editId = document.getElementById('edit-id-pegawai').value;
 
-            if(!id || !nama) { alert("Peringatan: Nomor Karyawan dan Nama Lengkap wajib diisi."); return; }
+            if(!id || !nama || !kodeRs) { alert("Peringatan: RS, Nomor Karyawan, dan Nama wajib diisi."); return; }
 
             const btnSave = document.getElementById('savePegawai');
             const originalText = btnSave.innerHTML;
@@ -335,15 +489,15 @@
                 if (!editId) {
                     if(!pass) { alert("Peringatan: Password wajib diisi untuk akun baru."); btnSave.innerHTML = originalText; btnSave.disabled = false; return; }
 
-                    const emailMasking = id + "@rssukapura.com";
+                    const emailMasking = `${id}@${kodeRs.toLowerCase()}.com`;
                     await createUserWithEmailAndPassword(secondaryAuth, emailMasking, pass);
-                    
                     await signOut(secondaryAuth);
 
                     await setDoc(doc(db, "users", id), { 
                         id_login: id, 
                         nama: nama, 
-                        role: role 
+                        role: role,
+                        kode_rs: kodeRs
                     }); 
                     alert("Berhasil! Akun Nakes terdaftar.");
 
@@ -351,7 +505,8 @@
                     await setDoc(doc(db, "users", editId), { 
                         id_login: id, 
                         nama: nama, 
-                        role: role 
+                        role: role,
+                        kode_rs: kodeRs
                     }, { merge: true }); 
                     alert("Data profil berhasil diupdate!");
                 }
@@ -361,7 +516,7 @@
             } catch (error) {
                 console.error("Error:", error);
                 if(error.code === 'auth/email-already-in-use') {
-                    alert("Gagal: Nomor Karyawan (ID) ini sudah terdaftar sebelumnya!");
+                    alert("Gagal: Nomor Karyawan di RS ini sudah terdaftar sebelumnya!");
                 } else if(error.code === 'auth/weak-password') {
                     alert("Gagal: Password minimal harus 6 karakter!");
                 } else {
@@ -392,23 +547,34 @@
         };
         document.getElementById('saveGejala').onclick = window.saveGejala;
         
-        window.showDetail = async (id) => { 
-            const s = await getDoc(doc(db, "riwayat_screening", id)); const v = s.data();
-            let h = `<div class="p-3 bg-light mb-3 rounded shadow-sm"><strong>Nama Pasien:</strong> ${v.nama_pasien || "-"}</div><ul class="list-group">`;
-            if(v.gejala_dipilih) v.gejala_dipilih.forEach(g => h += `<li class="list-group-item"><strong>${g}</strong> - ${gejalaLookup[g] || 'Deskripsi Gejala'}</li>`);
-            document.getElementById('detail-pasien-content').innerHTML = h + "</ul>";
-            new bootstrap.Modal(document.getElementById('modalDetailPasien')).show();
-        };
+        // FUNGSI SHOW DETAIL TELAH DIHAPUS UNTUK PRIVASI PASIEN
         
+        window.filterRS = () => {
+            const input = document.getElementById('searchRS').value.toLowerCase();
+            const rows = document.querySelectorAll('#list-rs tr');
+            rows.forEach(row => {
+                const kode = row.cells[0].innerText.toLowerCase();
+                const nama = row.cells[1].innerText.toLowerCase();
+                if(kode.includes(input) || nama.includes(input)) { row.style.display = ""; } else { row.style.display = "none"; }
+            });
+        };
+
         window.filterPegawai = () => {
             const input = document.getElementById('searchPegawai').value.toLowerCase();
+            const filterRs = document.getElementById('filter-rs-pegawai').value;
             const rows = document.querySelectorAll('#list-pegawai tr');
             rows.forEach(row => {
                 const idPegawai = row.cells[0].innerText.toLowerCase();
                 const namaPegawai = row.cells[1].innerText.toLowerCase();
-                if(idPegawai.includes(input) || namaPegawai.includes(input)) { row.style.display = ""; } else { row.style.display = "none"; }
+                const rowRs = row.getAttribute('data-rs');
+                
+                const matchText = idPegawai.includes(input) || namaPegawai.includes(input);
+                const matchRs = filterRs === "" || rowRs === filterRs;
+                
+                if(matchText && matchRs) { row.style.display = ""; } else { row.style.display = "none"; }
             });
         };
+
         window.filterGejala = () => {
             const input = document.getElementById('searchGejala').value.toLowerCase();
             const rows = document.querySelectorAll('#list-gejala tr');
@@ -418,27 +584,35 @@
                 if(kode.includes(input) || deskripsi.includes(input)) { row.style.display = ""; } else { row.style.display = "none"; }
             });
         };
+
         window.filterPasien = () => {
             const input = document.getElementById('searchPasien').value.toLowerCase();
+            const filterRs = document.getElementById('filter-rs-pasien').value;
             const rows = document.querySelectorAll('#list-pasien tr');
             rows.forEach(row => {
+                // Di tabel pasien sekarang cell[1] adalah NIK Masking
                 const idPasien = row.cells[1].innerText.toLowerCase();
-                const namaPasien = row.cells[2].innerText.toLowerCase();
-                if(idPasien.includes(input) || namaPasien.includes(input)) { row.style.display = ""; } else { row.style.display = "none"; }
+                const rowRs = row.getAttribute('data-rs');
+                
+                const matchText = idPasien.includes(input);
+                const matchRs = filterRs === "" || rowRs === filterRs;
+
+                if(matchText && matchRs) { row.style.display = ""; } else { row.style.display = "none"; }
             });
         };
+
         window.toggleSubSelect = () => { document.getElementById('wrap-parent').classList.toggle('d-none', document.getElementById('g-tipe').value === 'tetap'); };
+        
         window.exportExcel = () => {
             const clone = document.getElementById("tabel-pasien-full").cloneNode(true);
-            const header = clone.querySelector("thead tr");
-            header.cells[header.cells.length - 1].innerText = "Gejala Yang Dipilih";
+            
             clone.querySelectorAll('tbody tr').forEach(r => {
-                const hiddenData = r.querySelector('.export-gejala');
-                const actionCell = r.cells[r.cells.length - 1];
-                actionCell.innerHTML = hiddenData ? hiddenData.innerText : "-";
-                if(hiddenData) hiddenData.remove();
+                if (r.style.display === 'none') {
+                    r.remove();
+                }
             });
-            XLSX.writeFile(XLSX.utils.table_to_book(clone), "Laporan_Skrining_RSIJ.xlsx");
+            // Menyimpan dengan format excel, privasi tetap aman
+            XLSX.writeFile(XLSX.utils.table_to_book(clone, {raw: true}), "Monitoring_Skrining_Vendor.xlsx");
         }
     </script>
 </body>
